@@ -14,15 +14,13 @@ public class LifeGrid {
 
     private static void createAndShowGUI() {
         //Create and set up the window.
-        JFrame frame = new JFrame("HelloWorldSwing");
+        JFrame frame = new JFrame("Conway's Game of Life");
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setSize(dim.width/2, dim.height/2);
+        frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Add the ubiquitous "Hello World" label.
-        JLabel label = new JLabel("Hello World");
-        frame.getContentPane().add(label);
-
         //Display the window.
-        frame.pack();
         frame.setVisible(true);
     }
 
@@ -34,5 +32,9 @@ public class LifeGrid {
                 createAndShowGUI();
             }
         });
+    }
+    
+    public static void main (String[] args) {
+    	LifeGrid g = new LifeGrid(10);
     }
 }
