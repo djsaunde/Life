@@ -1,3 +1,4 @@
+package src;
 /**
  * @author Dan Saunders
  * LifeTest.java
