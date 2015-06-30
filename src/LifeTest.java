@@ -19,7 +19,7 @@ public class LifeTest {
 	    String in = sc.nextLine();
 	    Life game = null;
 	    if (in.equals("y")) {
-	      game = new Life(n, steps, new String[]{}); // creates a game with an empty board (to be randomly generated)
+	      game = new Life(n, steps, null); // creates a game with an empty board (to be randomly generated)
 	    }
 	    else {
 		  System.out.println("Enter a list of \"alive\" cells in tuple format with (rows, columns) such as (a,b) (c,d) (e,f)...");
