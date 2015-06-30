@@ -12,14 +12,15 @@ import javax.swing.border.MatteBorder;
 import javax.swing.JPanel;
 
 public class LifeGrid {
+	private static JFrame frame;
 
     private static void createAndShowGUI() {
         //Create and set up the window.
-        JFrame frame = new JFrame("Conway's Game of Life");
+        frame = new JFrame("Conway's Game of Life");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setSize(dim.width/2, dim.height/2);
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Display the window.
         frame.setVisible(true);
@@ -33,6 +34,10 @@ public class LifeGrid {
                 createAndShowGUI();
             }
         });
+    }
+    
+    public void draw() {
+    	
     }
     
     public static void main (String[] args) {
