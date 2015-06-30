@@ -20,7 +20,7 @@ package src;
     * 	@param board - the adjacency list which describes the initial state of the game (if this is passed in as null, the game board will
     *   be randomly generated)
     **/
-   public Life(int n, int s, String[] board) { // constructor for the game board with dimensions NxN which will run for s steps
+   public Life(int n, int s, String[] board) {
      this.n = n;
      parseBoard(board, n);
      
@@ -33,7 +33,7 @@ package src;
     * 
     * 	@param steps - number of times the game will step / draw GUI
     **/
-   private void run(int steps) { // sets the game in motion based on input
+   private void run(int steps) {
      for (int i = 0; i < steps; i++) {
        step();
        System.out.println(this.toString());
@@ -47,17 +47,17 @@ package src;
     * 	@param input - the adjacency matrix passed in by the user to be parsed
     * 	@param n - the number of rows / columns the game board will have
     **/
-   private void parseBoard(String[] input, int n) { // parse input in "lifeBoard" class variable
-	  lifeBoard = new boolean[n][n];
+    private void parseBoard(String[] input, int n) {
+      lifeBoard = new boolean[n][n];
 	  
-	  if (input == null) {
-		  genRandSeed();
-		  return;
-	  }
+      if (input == null) {
+        genRandSeed();
+          return;
+	}
 	  
-	  for (int i = 0; i < input.length; i++) { // input parsed by setting tuple locations to true
-		int a = Integer.parseInt(input[i].substring(1, 2));
-        int b = Integer.parseInt(input[i].substring(3, 4));
+	for (int i = 0; i < input.length; i++) { // input parsed by setting tuple locations to true
+	  int a = Integer.parseInt(input[i].substring(1, 2));
+          int b = Integer.parseInt(input[i].substring(3, 4));
         lifeBoard[a][b] = true;
       }
    }
@@ -65,7 +65,7 @@ package src;
    /**
     * generates a random starting board configuration for the game
     **/
-   private void genRandSeed() { // create a random configuration for which the game to begin on
+   private void genRandSeed() {
      Random rand = new Random();
      for (int i = 0; i < n; i++) {
        for (int j = 0; j < n; j++) {
@@ -83,7 +83,7 @@ package src;
     * calculates the logic for the next step in the game given the current state of the game board. handles the birth,
     * death, or maintenance of each cell on the board (considering a better algorithm... cell caching?)
     **/
-   private void step() { // method to move one step forward in the game
+   private void step() {
 	 boolean[][] newBoard = lifeBoard.clone(); // create a new board to record the changes in the Game of Life after 1 time step.
      for (int i = 0; i < n; i++) {
        for (int j = 0; j < n; j++) { // iterate through each cell in the 2D grid
@@ -128,9 +128,9 @@ package src;
    }
    
    /**
-    * returns a simple String representation of the board (in order to print to console for the early implementation)
+    * returns a simple String representation of the board (in order to print to console for early implementation)
     **/
-   public String toString() { // returns a String representation of the game board
+   public String toString() {
      String out = "";
      for (int i = 0; i < n; i++) {
        for (int j = 0; j < n; j++) {
