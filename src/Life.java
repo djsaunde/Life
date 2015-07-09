@@ -28,6 +28,7 @@ public class Life {
      
      gui = new LifeGrid(lifeBoard, n);
      
+     listeners = new ArrayList<BoardListener>();
      for (int i = 0; i < n; i++) {
     	 for (int j = 0; j < n; j++) {
     		 listeners.add(new GuiUpdater(i, j, n, gui.getPanel()));

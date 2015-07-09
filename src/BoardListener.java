@@ -1,3 +1,9 @@
+/**
+ * @author Dan Saunders
+ * BoardListener.java, GuiUpdater.java
+ * Observer pattern interface and class which will tell 
+ * the GUI to redraw certain cells in grid
+ */
 
 public interface BoardListener {
 	

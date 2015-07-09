@@ -1,3 +1,9 @@
+/**
+ * @author Dan Saunders
+ * LifeGrid.java
+ * GUI handling class
+ */
+
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
