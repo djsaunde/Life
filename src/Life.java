@@ -7,7 +7,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 
- public class Life {
+public class Life {
    private boolean[][] lifeBoard;
    private int n;
    private LifeGrid gui;
