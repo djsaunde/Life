@@ -1,151 +1,171 @@
 /**
- * @author Dan Saunders
- * Life.java
- * My implementation of Conway's Game of Life
+ *   @author Dan Saunders
+ *   Life.java
+ *   My implementation of Conway's Game of Life
  */
 
- import java.lang.reflect.InvocationTargetException;
+import java.awt.Color;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
- public class Life {
-   private boolean[][] lifeBoard;
-   private int n;
-   private LifeGrid gui;
+public class Life {
+	 private boolean[][] lifeBoard;
+	 private int n;
+	 private LifeGrid gui;
+	 private static Map<Integer, Integer> ages;
 
-   /**
-    * constructor for the Life game object, which will handle all the game's logic (and currently is printed to the console via toString()
-    * 
-    * 	@param n - the number of rows / columns on this instance of the game of Life grid
-    * 	@param s - the number of steps this game will run for 
-    * 	@param board - the adjacency list which describes the initial state of the game (if this is passed in as null, the game board will
-    *   be randomly generated)
-    *   @throws InterruptedException 
-    *   @throws InvocationTargetException 
-    **/
-   public Life(int n, int s, String[] board) throws InterruptedException, InvocationTargetException {
-     this.n = n;
-     parseBoard(board, n);
+	 /**
+	  *   constructor for the Life game object, which will handle all the game's logic (and currently is printed to the console via toString()
+	  * 
+	  *   @param n - the number of rows / columns on this instance of the game of Life grid
+	  *   @param s - the number of steps this game will run for 
+	  *   @param board - the adjacency list which describes the initial state of the game (if this is passed in as null, the game board will
+	  *   be randomly generated)
+	  *   @throws InterruptedException 
+	  *   @throws InvocationTargetException 
+	  **/
+	 public Life(int n, int s, String[] board) throws InterruptedException, InvocationTargetException {
+		 this.n = n;
+		 ages = new HashMap<Integer, Integer>();
+		 parseBoard(board, n);
      
-     gui = new LifeGrid(lifeBoard, n);
-     Thread.sleep(1000);
-     run(s);
-   }
+		 gui = new LifeGrid(lifeBoard, n);
+		 Thread.sleep(100);
+		 run(s);
+	 }
+	 
+	 
+	 public static int getAge(int location) {
+		 return ages.get(location);
+	 }
 
-   /**
-    * this method will set the game in motion and handle delegating logic / drawing the GUI
-    * 
-    * 	@param steps - number of times the game will step / draw GUI
-    * @throws InterruptedException 
-    **/
-   private void run(int steps) throws InterruptedException {
-     for (int i = 0; i < steps; i++) {
-       step();
-       gui.draw();
-       Thread.sleep(300);
-     }
-   }
+	 /**
+	  *   this method will set the game in motion and handle delegating logic / drawing the GUI
+	  * 
+	  *   @param steps - number of times the game will step / draw GUI
+	  *   @throws InterruptedException 
+	  **/
+	 private void run(int steps) throws InterruptedException {
+		 for (int i = 0; i < steps; i++) {
+			 step();
+			 gui.draw();
+			 Thread.sleep(100);
+		 }
+	 }
    
-   /**
-    * either reads in a game board from user input, or calls genRandSeed() if the board is null
-    * 
-    * 	@param input - the adjacency matrix passed in by the user to be parsed
-    * 	@param n - the number of rows / columns the game board will have
-    **/
-    private void parseBoard(String[] input, int n) {
-    	lifeBoard = new boolean[n][n];
+	 /**
+	  *   either reads in a game board from user input, or calls genRandSeed() if the board is null
+	  * 
+	  *   @param input - the adjacency matrix passed in by the user to be parsed
+	  *   @param n - the number of rows / columns the game board will have
+	  **/
+	 private void parseBoard(String[] input, int n) {
+		 lifeBoard = new boolean[n][n];
 	  
-    	if (input == null) {
-    		genRandSeed();
-    		return;
-    	}
+	     if (input == null) { // if no user-input
+	    	 genRandSeed();
+	    	 return;
+	     }
 	  
-    	for (int i = 0; i < input.length; i++) { // input parsed by setting tuple locations to true
-    		int a = Integer.parseInt(input[i].substring(1, 2));
-    			int b = Integer.parseInt(input[i].substring(3, 4));
-    			lifeBoard[a][b] = true;
-    	}
-    }
+	     for (int i = 0; i < n; i++) { 
+	    	 for (int j = 0; j < n; j++) {
+	    		 ages.put(i*n+j, 0); // initialize ages to be zero for all entries
+	    	 }
+	     }
+	     for (int i = 0; i < input.length; i++) { // input parsed by setting tuple locations to true
+	         int a = Integer.parseInt(input[i].substring(1, 2));
+    		 int b = Integer.parseInt(input[i].substring(3, 4));
+    		 lifeBoard[a][b] = true;
+    		 ages.put(a*n+b, 1); // re-init ages to be one at initial config cells
+	     }
+	 }
    
-   /**
-    * generates a random starting board configuration for the game
-    **/
-   private void genRandSeed() {
-	   Random rand = new Random();
-	   		for (int i = 0; i < n; i++) {
-	   			for (int j = 0; j < n; j++) {
-	   				if (rand.nextDouble() < 0.15) {
-	   					lifeBoard[i][j] = true;
+   	 /**
+	  *   generates a random starting board configuration for the game
+	  **/
+	 private void genRandSeed() {
+		 Random rand = new Random();
+	   	 	for (int i = 0; i < n; i++) {
+	   	 		for (int j = 0; j < n; j++) {
+	   				if (rand.nextDouble() < 0.10) {
+	   					ages.put(i*n+j, 1); // init ages at this i, j to be one generation old
+	   					lifeBoard[i][j] = true; // init cell alive at this i, j
 	   				}
 	   				else {
-	   					lifeBoard[i][j] = false;
+	   					ages.put(i*n+j, 0); // init ages at this i, j to be zero generations old
+	   					lifeBoard[i][j] = false; // init cell dead at this i, j
 	   				}
 	   			}
 	   		}
    		}
    
-   /**
-    * calculates the logic for the next step in the game given the current state of the game board. handles the birth,
-    * death, or maintenance of each cell on the board (considering a better algorithm... cell caching?)
-    **/
-   private void step() {
-	   boolean[][] newBoard = lifeBoard.clone(); // create a new board to record the changes in the Game of Life after 1 time step.
-	   for (int i = 0; i < n; i++) {
-		   for (int j = 0; j < n; j++) { // iterate through each cell in the 2D grid
-			   int neighbors = 0; // number of neighbors
-			   if (i+1 < n && lifeBoard[i+1][j]) { // neighbor to right
-				   neighbors++;
-			   }
-			   if (i-1 >= 0 && lifeBoard[i-1][j]) { // neighbor to left
-				   neighbors++;
-			   }
-			   if (j+1 < n && lifeBoard[i][j+1]) { // neighbor above
-				   neighbors++;
-			   }
-			   if (j-1 >= 0 && lifeBoard[i][j-1]) { // neighbor below
-				   neighbors++;
-			   }
-			   if (i+1 < n && j-1 >= 0 && lifeBoard[i+1][j-1]) { // upper-right neighbor
-				   neighbors++;
-			   }
-			   if (i-1 >= 0 && j-1 >= 0 && lifeBoard[i-1][j-1]) { // upper-left neighbor
-				   neighbors++;
-			   }
-			   if (i+1 < n && j+1 < n && lifeBoard[i+1][j+1]) { // lower-right neighbor
-				   neighbors++;
-			   }
-			   if (i-1 >= 0 && j+1 < n && lifeBoard[i-1][j+1]) { // lower-left neighbor
-				   neighbors++;
-			   }
-			   if (lifeBoard[i][j]) {
-				   if (neighbors <= 1 || neighbors >= 4) {
-					   newBoard[i][j] = false;
-				   }
-			   }
-			   else {
-				   if (neighbors == 3) {
-					   newBoard[i][j] = true;
-				   }
-			   }
-		   }
-	   }
-	   lifeBoard = newBoard;
-   }
+     /**
+      *   logic for the next step in the game given the current state of the game board. handles the birth,
+      *   death, or maintenance of each cell on the board (considering a better algorithm... cell caching?)
+      **/
+      private void step() {
+    	  boolean[][] newBoard = lifeBoard.clone(); // create a new board to record the changes in the Game of Life after 1 time step.
+    	  for (int i = 0; i < n; i++) {
+    		  for (int j = 0; j < n; j++) { // iterate through each cell in the 2D grid
+    			  int neighbors = 0; // number of neighbors
+    			  if (i+1 < n && lifeBoard[i+1][j]) { // neighbor to right
+    				  neighbors++;
+    			  }
+    			  if (i-1 >= 0 && lifeBoard[i-1][j]) { // neighbor to left
+    				  neighbors++;
+    			  }
+    			  if (j+1 < n && lifeBoard[i][j+1]) { // neighbor above
+    				  neighbors++;
+    			  }
+    			  if (j-1 >= 0 && lifeBoard[i][j-1]) { // neighbor below
+    				  neighbors++;
+    			  }
+    			  if (i+1 < n && j-1 >= 0 && lifeBoard[i+1][j-1]) { // upper-right neighbor
+    				  neighbors++;
+    			  }
+    			  if (i-1 >= 0 && j-1 >= 0 && lifeBoard[i-1][j-1]) { // upper-left neighbor
+    				  neighbors++;
+    			  }
+    			  if (i+1 < n && j+1 < n && lifeBoard[i+1][j+1]) { // lower-right neighbor
+    				  neighbors++;
+    			  }
+    			  if (i-1 >= 0 && j+1 < n && lifeBoard[i-1][j+1]) { // lower-left neighbor
+    				  neighbors++;
+    			  }
+    			  if (lifeBoard[i][j]) {
+    				  if (neighbors <= 1 || neighbors >= 4) { // rule of the Game of Life
+    					  newBoard[i][j] = false; // kill cell at this i, j
+    					  ages.put(i*n+j, 0); // this cell is dead -> age = 0
+    					  continue;
+    				  }
+    				  ages.put(i*n+j, ages.get(i*n+j)+1); // this cell lives on -> age += 1
+    			  }
+    			  else {
+    				  if (neighbors == 3) { // rule of the Game of Life
+    					  newBoard[i][j] = true; // birth cell at this i, j
+    					  ages.put(i*n+j, 1); // this cell is born -> age = 1
+    				  }
+    			  }
+    		  }
+    	  }
+    	  lifeBoard = newBoard;
+      }
    
-   /**
-    * returns a simple String representation of the board (in order to print to console for early implementation)
-    **/
-   public String toString() {
-	   String out = "";
-	   for (int i = 0; i < n; i++) {
-		   for (int j = 0; j < n; j++) {
-			   if (lifeBoard[i][j]) {
-				   out += "x";
-			   } else {
-				   out += " ";
-			   }
-		   }
-		   out += "\n";
-	   }
-	   return out;
-   	}
+      /**
+       *   returns a simple String representation of the board (in order to print to console for early implementation)
+       **/
+      public String toString() {
+    	  String out = "";
+    	  for (int i = 0; i < n; i++) {
+    		  for (int j = 0; j < n; j++) {
+    			  if (lifeBoard[i][j]) {
+    				  out += "x";
+    			  } else {
+    				  out += " ";
+    			  }
+    		  }
+    		  out += "\n";
+    	  }
+    	  return out;
+   	  }
  }

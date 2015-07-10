@@ -1,7 +1,7 @@
 /**
- * @author Dan Saunders
- * LifeTest.java
- * Stub class to run the Game of Life / implement JUnit tests
+ *   @author Dan Saunders
+ *   LifeTest.java
+ *   Stub class to run the Game of Life / implement JUnit tests
  */
 
 import java.lang.reflect.InvocationTargetException;

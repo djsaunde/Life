@@ -1,19 +1,13 @@
 /**
- * @author Dan Saunders
- * LifeGrid.java
- * class responsible for handling the Game of Life's GUI
+ *   @author Dan Saunders
+ *   LifeGrid.java
+ *   class responsible for handling the Game of Life's GUI
  */
 
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.BorderFactory;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
+import java.util.Map;
 
 public class LifeGrid {
 	private int n;
@@ -21,11 +15,11 @@ public class LifeGrid {
 	private MyPanel panel;
 	
 	/**
-	 * constructor for LifeGrid which sets up class variables and sets up GUI
-	 * @param board - Game of Life board
-	 * @param n - numbers of rows, columns in grid
-	 * @throws InterruptedException 
-	 * @throws InvocationTargetException 
+	 *   constructor for LifeGrid which sets up class variables and sets up GUI
+	 *   @param board - Game of Life board
+	 *   @param n - numbers of rows, columns in grid
+	 *   @throws InterruptedException 
+	 *   @throws InvocationTargetException 
 	 */
 	public LifeGrid(boolean[][] board, int n) throws InvocationTargetException, InterruptedException {
 		this.board = board;
@@ -39,7 +33,7 @@ public class LifeGrid {
 	}
 	
 	/**
-	 * called from constructor, creates and shows the GUI
+	 *   called from constructor, creates and shows the GUI
 	 */
 	private void createAndShowGUI() {
 		panel = new MyPanel(board, n);
@@ -53,7 +47,7 @@ public class LifeGrid {
 	}
 	
 	/**
-	 * calls the repaint() function on the panel which holds the game's grid components
+	 *   calls the repaint() function on the panel which holds the game's grid components
 	 */
 	public void draw() {
 		panel.repaint();
