@@ -4,11 +4,12 @@
  * Stub class to run the Game of Life / implement JUnit tests
  */
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Scanner;
 
 public class LifeTest {
 	
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, InvocationTargetException {
 		Scanner sc = new Scanner(System.in);
 	    System.out.print("Enter number of rows & columns: "); // what dimensions??
 	    int n = Integer.parseInt(sc.nextLine());

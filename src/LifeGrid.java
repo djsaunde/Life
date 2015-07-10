@@ -1,3 +1,9 @@
+/**
+ * @author Dan Saunders
+ * LifeGrid.java
+ * class responsible for handling the Game of Life's GUI
+ */
+
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -6,6 +12,7 @@ import javax.swing.BorderFactory;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public class LifeGrid {
@@ -13,17 +20,27 @@ public class LifeGrid {
 	private boolean[][] board;
 	private MyPanel panel;
 	
-	public LifeGrid(boolean[][] board, int n) {
+	/**
+	 * constructor for LifeGrid which sets up class variables and sets up GUI
+	 * @param board - Game of Life board
+	 * @param n - numbers of rows, columns in grid
+	 * @throws InterruptedException 
+	 * @throws InvocationTargetException 
+	 */
+	public LifeGrid(boolean[][] board, int n) throws InvocationTargetException, InterruptedException {
 		this.board = board;
 		this.n = n;
 		
-		SwingUtilities.invokeLater(new Runnable() {
+		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
 				createAndShowGUI();
 			}
 		});
 	}
 	
+	/**
+	 * called from constructor, creates and shows the GUI
+	 */
 	private void createAndShowGUI() {
 		panel = new MyPanel(board, n);
 		JFrame f = new JFrame("Conway's Game of Life");
@@ -31,81 +48,14 @@ public class LifeGrid {
 		f.add(panel);
 		f.setResizable(false);
 		f.pack();
+		f.setLocationRelativeTo(null);
 		f.setVisible(true);
 	}
 	
+	/**
+	 * calls the repaint() function on the panel which holds the game's grid components
+	 */
 	public void draw() {
 		panel.repaint();
 	}
-}
-	
-class MyPanel extends JPanel {
-
-	private ArrayList<Cell> cells = new ArrayList<Cell>();
-	private Dimension d;
-	private boolean[][] board;
-	private int n;
-	private int X_DIMENSION = 800, Y_DIMENSION = 600;
-	
-	public MyPanel(boolean[][] board, int n) {
-		this.n = n;
-		this.board = board;
-		d = getPreferredSize();
-		
-		for (int i = 0; i < d.getWidth(); i += d.getWidth() / n) {
-			for (int k = 0; k < d.getHeight(); k += d.getHeight() / n) {
-				cells.add(new Cell(i, k, n, d));
-			}
-		}
-		
-		setBorder(BorderFactory.createLineBorder(Color.black));
-	}
-	
-	public Dimension getPreferredSize() {
-		return new Dimension(X_DIMENSION, Y_DIMENSION);
-	}
-	
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		for (Cell cell : cells) {
-			if (board[cell.getXBoard()][cell.getYBoard()]) {
-				cell.paintSquare(g);
-			}
-		}
-	}
-}
-
-class Cell {
-
-	private int xPos;
-    private int yPos;
-    private int width;
-    private int height;
-    private int xBoard;
-    private int yBoard;
-    
-    public Cell(int xPos, int yPos, int n, Dimension d) {
-    	this.xPos = xPos;
-    	this.yPos = yPos;
-    	width = (int) (d.getWidth() / n);
-    	height = (int) (d.getHeight() / n);
-    	xBoard = xPos / width;
-    	yBoard = yPos / height;
-    }
-    
-    public int getXBoard() {
-    	return xBoard;
-    }
-    
-    public int getYBoard() {
-    	return yBoard;
-    }
-
-    public void paintSquare(Graphics g){
-    	g.setColor(Color.RED);
-        g.fillRect(xPos,yPos,width,height);
-        g.setColor(Color.BLACK);
-        g.drawRect(xPos,yPos,width,height);
-        
-    }
 }

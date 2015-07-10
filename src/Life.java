@@ -4,7 +4,8 @@
  * My implementation of Conway's Game of Life
  */
 
- import java.util.*;
+ import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
  public class Life {
    private boolean[][] lifeBoard;
@@ -18,9 +19,10 @@
     * 	@param s - the number of steps this game will run for 
     * 	@param board - the adjacency list which describes the initial state of the game (if this is passed in as null, the game board will
     *   be randomly generated)
-    * @throws InterruptedException 
+    *   @throws InterruptedException 
+    *   @throws InvocationTargetException 
     **/
-   public Life(int n, int s, String[] board) throws InterruptedException {
+   public Life(int n, int s, String[] board) throws InterruptedException, InvocationTargetException {
      this.n = n;
      parseBoard(board, n);
      
@@ -39,7 +41,7 @@
      for (int i = 0; i < steps; i++) {
        step();
        gui.draw();
-       Thread.sleep(500);
+       Thread.sleep(300);
      }
    }
    
@@ -71,7 +73,7 @@
 	   Random rand = new Random();
 	   		for (int i = 0; i < n; i++) {
 	   			for (int j = 0; j < n; j++) {
-	   				if (rand.nextDouble() < 0.25) {
+	   				if (rand.nextDouble() < 0.15) {
 	   					lifeBoard[i][j] = true;
 	   				}
 	   				else {
