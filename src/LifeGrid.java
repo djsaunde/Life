@@ -1,9 +1,3 @@
-/**
- * @author Dan Saunders
- * LifeGrid.java
- * GUI handling class
- */
-
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -43,20 +37,19 @@ public class LifeGrid {
 	public void draw() {
 		panel.repaint();
 	}
-	
-	public MyPanel getPanel() {
-		return panel;
-	}
 }
 	
 class MyPanel extends JPanel {
 
 	private ArrayList<Cell> cells = new ArrayList<Cell>();
 	private Dimension d;
+	private boolean[][] board;
+	private int n;
 	private int X_DIMENSION = 800, Y_DIMENSION = 600;
-	private Graphics g;
 	
 	public MyPanel(boolean[][] board, int n) {
+		this.n = n;
+		this.board = board;
 		d = getPreferredSize();
 		
 		for (int i = 0; i < d.getWidth(); i += d.getWidth() / n) {
@@ -73,12 +66,12 @@ class MyPanel extends JPanel {
 	}
 	
 	protected void paintComponent(Graphics g) {
-		this.g = g;
 		super.paintComponent(g);
-	}
-	
-	protected void paintCell(int index) {
-		cells.get(index).paintSquare(g);
+		for (Cell cell : cells) {
+			if (board[cell.getXBoard()][cell.getYBoard()]) {
+				cell.paintSquare(g);
+			}
+		}
 	}
 }
 
@@ -112,6 +105,7 @@ class Cell {
     	g.setColor(Color.RED);
         g.fillRect(xPos,yPos,width,height);
         g.setColor(Color.BLACK);
-        g.drawRect(xPos,yPos,width,height);   
+        g.drawRect(xPos,yPos,width,height);
+        
     }
 }
