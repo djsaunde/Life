@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-class MyPanel extends JPanel {
+class GridPanel extends JPanel {
 
 	private static ArrayList<Cell> cells = new ArrayList<Cell>();
 	private final int X_DIMENSION = 800, Y_DIMENSION = 800;
 	
-	public MyPanel(int n) {
+	public GridPanel(int n) {
 		Dimension d = getPreferredSize();
 		
 		for (int i = 0; i < d.getWidth(); i += d.getWidth() / n) {

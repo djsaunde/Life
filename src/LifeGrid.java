@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import java.lang.reflect.InvocationTargetException;
 
 public class LifeGrid {
-	private MyPanel panel;
+	private GridPanel panel;
 	private JFrame f;
 	
 	/**
@@ -31,7 +31,8 @@ public class LifeGrid {
 	 *   called from constructor, creates and shows the GUI
 	 */
 	private void createAndShowGUI() {
-		panel = new MyPanel(Life.getDimension());
+		panel = new GridPanel(Life.getDimension());
+		
 		f = new JFrame("Conway's Game of Life");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.add(panel);
