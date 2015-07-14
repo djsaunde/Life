@@ -14,16 +14,11 @@ import javax.swing.JPanel;
 
 class MyPanel extends JPanel {
 
-	private ArrayList<Cell> cells = new ArrayList<Cell>();
-	private Dimension d;
-	private boolean[][] board;
-	private int n;
-	private int X_DIMENSION = 800, Y_DIMENSION = 800;
+	private static ArrayList<Cell> cells = new ArrayList<Cell>();
+	private final int X_DIMENSION = 800, Y_DIMENSION = 800;
 	
-	public MyPanel(boolean[][] board, int n) {
-		this.n = n;
-		this.board = board;
-		d = getPreferredSize();
+	public MyPanel(int n) {
+		Dimension d = getPreferredSize();
 		
 		for (int i = 0; i < d.getWidth(); i += d.getWidth() / n) {
 			for (int k = 0; k < d.getHeight(); k += d.getHeight() / n) {
@@ -41,7 +36,7 @@ class MyPanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		for (Cell cell : cells) {
-			if (board[cell.getXBoard()][cell.getYBoard()]) {
+			if (Life.getBoard()[cell.getXBoard()][cell.getYBoard()]) {
 				cell.paintSquare(g);
 			}
 		}

@@ -18,7 +18,6 @@ class Cell {
     private int height;
     private int xBoard;
     private int yBoard;
-    private int n;
     private static final Map<Integer, Color> colorMap;
     	static {
     		colorMap = new HashMap<Integer, Color>();
@@ -34,7 +33,6 @@ class Cell {
     	height = (int) (d.getHeight() / n);
     	xBoard = xPos / width;
     	yBoard = yPos / height;
-    	this.n = n;
     }
     
     public int getXBoard() {
@@ -46,10 +44,10 @@ class Cell {
     }
 
     public void paintSquare(Graphics g){
-    	g.setColor(getColor(Life.getAge(xBoard*n+yBoard)));
-        g.fillOval(xPos, yPos, width, height);
+    	g.setColor(getColor(Life.getAge(xBoard*Life.getDimension()+yBoard)));
+        g.fillRect(xPos, yPos, width, height);
         g.setColor(Color.BLACK);
-        g.drawOval(xPos, yPos, width, height);
+        g.drawRect(xPos, yPos, width, height);
     }
     
     public Color getColor(int color) {

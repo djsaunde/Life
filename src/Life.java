@@ -4,14 +4,15 @@
  *   My implementation of Conway's Game of Life
  */
 
-import java.awt.Color;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class Life {
-	 private boolean[][] lifeBoard;
-	 private int n;
-	 private LifeGrid gui;
+	 private static boolean[][] lifeBoard;
+	 private static int n;
+	 private static LifeGrid gui;
 	 private static Map<Integer, Integer> ages;
 
 	 /**
@@ -23,20 +24,41 @@ public class Life {
 	  *   be randomly generated)
 	  *   @throws InterruptedException 
 	  *   @throws InvocationTargetException 
+	  *   @throws FileNotFoundException 
 	  **/
-	 public Life(int n, int s, String[] board) throws InterruptedException, InvocationTargetException {
+	 public Life(int n, int s, File f) throws InterruptedException, InvocationTargetException, FileNotFoundException {
 		 this.n = n;
 		 ages = new HashMap<Integer, Integer>();
-		 parseBoard(board, n);
+		 parseBoard(f, n);
      
-		 gui = new LifeGrid(lifeBoard, n);
+		 gui = new LifeGrid(n);
 		 Thread.sleep(100);
 		 run(s);
 	 }
 	 
-	 
+	 /**
+	  * returns the age associated with the cell at "location"
+	  * @param location - index of cell whose age we wish to retrieve
+	  * @return int ages.get(location)
+	  */
 	 public static int getAge(int location) {
 		 return ages.get(location);
+	 }
+	 
+	 /**
+	  * getter for lifeBoard, sole instance of the game board
+	  * @return boolean[][] lifeBoard
+	  */
+	 public static boolean[][] getBoard() {
+		 return lifeBoard;
+	 }
+	 
+	 /**
+	  * getter for n, the number of rows / columns in the game board
+	  * @return int n
+	  */
+	 public static int getDimension() {
+		 return n;
 	 }
 
 	 /**
@@ -48,21 +70,22 @@ public class Life {
 	 private void run(int steps) throws InterruptedException {
 		 for (int i = 0; i < steps; i++) {
 			 step();
-			 gui.draw();
-			 Thread.sleep(100);
+			 gui.draw(i);
+			 Thread.sleep(50);
 		 }
 	 }
    
 	 /**
 	  *   either reads in a game board from user input, or calls genRandSeed() if the board is null
 	  * 
-	  *   @param input - the adjacency matrix passed in by the user to be parsed
+	  *   @param f - the adjacency matrix passed in by the user to be parsed
 	  *   @param n - the number of rows / columns the game board will have
+	  *   @throws FileNotFoundException 
 	  **/
-	 private void parseBoard(String[] input, int n) {
+	 private void parseBoard(File f, int n) throws FileNotFoundException {
 		 lifeBoard = new boolean[n][n];
 	  
-	     if (input == null) { // if no user-input
+	     if (f == null) { // if no user-input
 	    	 genRandSeed();
 	    	 return;
 	     }
@@ -72,11 +95,19 @@ public class Life {
 	    		 ages.put(i*n+j, 0); // initialize ages to be zero for all entries
 	    	 }
 	     }
-	     for (int i = 0; i < input.length; i++) { // input parsed by setting tuple locations to true
-	         int a = Integer.parseInt(input[i].substring(1, 2));
-    		 int b = Integer.parseInt(input[i].substring(3, 4));
-    		 lifeBoard[a][b] = true;
-    		 ages.put(a*n+b, 1); // re-init ages to be one at initial config cells
+	     
+	     Scanner sc = new Scanner(f);
+	     String input = sc.nextLine();
+	     sc.close();
+	     
+	     String[] cells = input.split(" ");
+	     
+	     for (int i = 0; i < cells.length; i++) { // input parsed by setting tuple locations to true
+	         String[] cell = cells[i].split(",");
+	         int a = Integer.parseInt(cell[0]);
+	         int b = Integer.parseInt(cell[1]);
+	         lifeBoard[a][b] = true;
+	         ages.put(a*n+b, 1); // re-init ages to be one at initial config cells
 	     }
 	 }
    
@@ -87,7 +118,7 @@ public class Life {
 		 Random rand = new Random();
 	   	 	for (int i = 0; i < n; i++) {
 	   	 		for (int j = 0; j < n; j++) {
-	   				if (rand.nextDouble() < 0.10) {
+	   				if (rand.nextDouble() < .1) {
 	   					ages.put(i*n+j, 1); // init ages at this i, j to be one generation old
 	   					lifeBoard[i][j] = true; // init cell alive at this i, j
 	   				}
@@ -104,7 +135,7 @@ public class Life {
       *   death, or maintenance of each cell on the board (considering a better algorithm... cell caching?)
       **/
       private void step() {
-    	  boolean[][] newBoard = lifeBoard.clone(); // create a new board to record the changes in the Game of Life after 1 time step.
+    	  boolean[][] newBoard = new boolean[n][n]; // create a new board to record the changes in the Game of Life after 1 time step.
     	  for (int i = 0; i < n; i++) {
     		  for (int j = 0; j < n; j++) { // iterate through each cell in the 2D grid
     			  int neighbors = 0; // number of neighbors
@@ -133,17 +164,22 @@ public class Life {
     				  neighbors++;
     			  }
     			  if (lifeBoard[i][j]) {
-    				  if (neighbors <= 1 || neighbors >= 4) { // rule of the Game of Life
+    				  if (neighbors < 2 || neighbors > 3) { // rule of the Game of Life
     					  newBoard[i][j] = false; // kill cell at this i, j
     					  ages.put(i*n+j, 0); // this cell is dead -> age = 0
-    					  continue;
     				  }
-    				  ages.put(i*n+j, ages.get(i*n+j)+1); // this cell lives on -> age += 1
+    				  else {
+    					  newBoard[i][j] = true;
+    					  ages.put(i*n+j, ages.get(i*n+j)+1); // this cell lives on -> age += 1
+    				  }
     			  }
     			  else {
     				  if (neighbors == 3) { // rule of the Game of Life
     					  newBoard[i][j] = true; // birth cell at this i, j
     					  ages.put(i*n+j, 1); // this cell is born -> age = 1
+    				  }
+    				  else {
+    					  newBoard[i][j] = false;
     				  }
     			  }
     		  }

@@ -7,12 +7,10 @@
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 
 public class LifeGrid {
-	private int n;
-	private boolean[][] board;
 	private MyPanel panel;
+	private JFrame f;
 	
 	/**
 	 *   constructor for LifeGrid which sets up class variables and sets up GUI
@@ -21,10 +19,7 @@ public class LifeGrid {
 	 *   @throws InterruptedException 
 	 *   @throws InvocationTargetException 
 	 */
-	public LifeGrid(boolean[][] board, int n) throws InvocationTargetException, InterruptedException {
-		this.board = board;
-		this.n = n;
-		
+	public LifeGrid(int n) throws InvocationTargetException, InterruptedException {
 		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
 				createAndShowGUI();
@@ -36,8 +31,8 @@ public class LifeGrid {
 	 *   called from constructor, creates and shows the GUI
 	 */
 	private void createAndShowGUI() {
-		panel = new MyPanel(board, n);
-		JFrame f = new JFrame("Conway's Game of Life");
+		panel = new MyPanel(Life.getDimension());
+		f = new JFrame("Conway's Game of Life");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.add(panel);
 		f.setResizable(false);
@@ -49,7 +44,8 @@ public class LifeGrid {
 	/**
 	 *   calls the repaint() function on the panel which holds the game's grid components
 	 */
-	public void draw() {
+	public void draw(int iteration) {
+		f.setTitle("Conway's Game of Life: Generation " + (iteration+1));
 		panel.repaint();
 	}
 }
