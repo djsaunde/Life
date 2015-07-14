@@ -6,11 +6,14 @@
 
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
+
+import java.awt.GridLayout;
 import java.lang.reflect.InvocationTargetException;
 
 public class LifeGrid {
-	private GridPanel panel;
 	private JFrame f;
+	private GridPanel grid;
+	private UIPanel ui;
 	
 	/**
 	 *   constructor for LifeGrid which sets up class variables and sets up GUI
@@ -31,11 +34,13 @@ public class LifeGrid {
 	 *   called from constructor, creates and shows the GUI
 	 */
 	private void createAndShowGUI() {
-		panel = new GridPanel(Life.getDimension());
-		
+		grid = new GridPanel(Life.getDimension());
+		ui = new UIPanel();
 		f = new JFrame("Conway's Game of Life");
+		f.setLayout(new GridLayout(1, 2));
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.add(panel);
+		f.add(grid);
+		f.add(ui);
 		f.setResizable(false);
 		f.pack();
 		f.setLocationRelativeTo(null);
@@ -47,6 +52,6 @@ public class LifeGrid {
 	 */
 	public void draw(int iteration) {
 		f.setTitle("Conway's Game of Life: Generation " + (iteration+1));
-		panel.repaint();
+		grid.repaint();
 	}
 }

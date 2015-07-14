@@ -51,9 +51,9 @@ class Cell {
     }
     
     public Color getColor(int color) {
-    	if (color > 8) {
+    	if (color > 51) {
     		return Color.BLACK;
     	}
-    	return colorMap.get(color);
+    	return new Color(200, 100, color*5);
     }
 }
