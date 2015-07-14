@@ -7,8 +7,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.Map;
-import java.util.HashMap;
 
 class Cell {
 
@@ -18,13 +16,6 @@ class Cell {
     private int height;
     private int xBoard;
     private int yBoard;
-    private static final Map<Integer, Color> colorMap;
-    	static {
-    		colorMap = new HashMap<Integer, Color>();
-    		colorMap.put(1, Color.BLUE); colorMap.put(2, Color.CYAN); colorMap.put(3, Color.GREEN);
-    		colorMap.put(4, Color.YELLOW); colorMap.put(5, Color.ORANGE); colorMap.put(6, Color.RED);
-    		colorMap.put(7, Color.PINK); colorMap.put(8, Color.MAGENTA);
-    	}
     
     public Cell(int xPos, int yPos, int n, Dimension d) {
     	this.xPos = xPos;
@@ -35,14 +26,26 @@ class Cell {
     	yBoard = yPos / height;
     }
     
+    /**
+     * getter for cell's x position on the game board
+     * @return int xBoard
+     */
     public int getXBoard() {
     	return xBoard;
     }
     
+    /**
+     * getter for cell's y position on the game board
+     * @return int yBoard
+     */
     public int getYBoard() {
     	return yBoard;
     }
 
+    /**
+     * paints this cell on the GUI
+     * @param g - Graphics object associated with GUI
+     */
     public void paintSquare(Graphics g){
     	g.setColor(getColor(Life.getAge(xBoard*Life.getDimension()+yBoard)));
         g.fillRect(xPos, yPos, width, height);
@@ -50,10 +53,15 @@ class Cell {
         g.drawRect(xPos, yPos, width, height);
     }
     
+    /**
+     * returns appropriate Color object based on age logic
+     * @param color - integer which tells us which color to return
+     * @return Color object
+     */
     public Color getColor(int color) {
     	if (color > 51) {
     		return Color.BLACK;
     	}
-    	return new Color(200, 100, color*5);
+    	return new Color(190, 100, color*5);
     }
 }

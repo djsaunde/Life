@@ -1,7 +1,7 @@
 /**
  *   @author Dan Saunders
  *   LifeTest.java
- *   Stub class to run the Game of Life / implement JUnit tests
+ *   experimental stub class to run the Game of Life starting from GUI
  */
 
 import java.io.File;
@@ -16,17 +16,17 @@ public class LifeTest {
 	    System.out.print("Enter number of rows & columns: "); // what dimensions??
 	    int n = Integer.parseInt(sc.nextLine());
 	    System.out.print("Enter number of steps to run simulation: "); // how many steps??
-	    int steps = Integer.parseInt(sc.nextLine());
+	    int s = Integer.parseInt(sc.nextLine());
 	    System.out.print("Generate a random game of Life? (y/n) -> "); // the user may input his / her own configuration
 	    String in = sc.nextLine();
 	    sc.close();
-		Life game;
+		LifeGrid gui = new LifeGrid();
 	    if (in.equals("y")) {
-	      game = new Life(n, steps, null); // creates a game with an empty board (to be randomly generated)
+	      Life game = new Life(n, s, null, gui); // creates a game with an empty board (to be randomly generated)
 	    }
 	    else {
-	      File f = new File("src/input.txt");
-		  game = new Life(n, steps, f);
+	      File f = new File("src/input.txt"); // create board from input file of vectors (currently Gosper's Glider Gun)
+		  Life game = new Life(n, s, f, gui);
 		}
 	}
 }

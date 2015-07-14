@@ -12,6 +12,7 @@ import java.util.*;
 public class Life {
 	 private static boolean[][] lifeBoard;
 	 private static int n;
+	 private static int s;
 	 private static LifeGrid gui;
 	 private static Map<Integer, Integer> ages;
 
@@ -26,14 +27,12 @@ public class Life {
 	  *   @throws InvocationTargetException 
 	  *   @throws FileNotFoundException 
 	  **/
-	 public Life(int n, int s, File f) throws InterruptedException, InvocationTargetException, FileNotFoundException {
-		 this.n = n;
+	 public Life(int n, int s, File f, LifeGrid gui) throws InterruptedException, InvocationTargetException, FileNotFoundException {
+		 Life.n = n;
+		 Life.s = s;
 		 ages = new HashMap<Integer, Integer>();
-		 parseBoard(f, n);
-     
-		 gui = new LifeGrid(n);
-		 Thread.sleep(100);
-		 run(s);
+		 parseBoard(f);
+		 Life.gui = gui;
 	 }
 	 
 	 /**
@@ -67,12 +66,16 @@ public class Life {
 	  *   @param steps - number of times the game will step / draw GUI
 	  *   @throws InterruptedException 
 	  **/
-	 private void run(int steps) throws InterruptedException {
-		 for (int i = 0; i < steps; i++) {
+	 public static void run() throws InterruptedException {
+		 for (int i = 0; i < s; i++) {
 			 step();
 			 gui.draw(i);
-			 Thread.sleep(50);
+			 Thread.sleep(75);
 		 }
+	 }
+	 
+	 public static void stop() throws InterruptedException {
+		 
 	 }
    
 	 /**
@@ -82,7 +85,7 @@ public class Life {
 	  *   @param n - the number of rows / columns the game board will have
 	  *   @throws FileNotFoundException 
 	  **/
-	 private void parseBoard(File f, int n) throws FileNotFoundException {
+	 private void parseBoard(File f) throws FileNotFoundException {
 		 lifeBoard = new boolean[n][n];
 	  
 	     if (f == null) { // if no user-input
@@ -118,7 +121,7 @@ public class Life {
 		 Random rand = new Random();
 	   	 	for (int i = 0; i < n; i++) {
 	   	 		for (int j = 0; j < n; j++) {
-	   				if (rand.nextDouble() < .1) {
+	   				if (rand.nextDouble() < .12) {
 	   					ages.put(i*n+j, 1); // init ages at this i, j to be one generation old
 	   					lifeBoard[i][j] = true; // init cell alive at this i, j
 	   				}
@@ -134,7 +137,7 @@ public class Life {
       *   logic for the next step in the game given the current state of the game board. handles the birth,
       *   death, or maintenance of each cell on the board (considering a better algorithm... cell caching?)
       **/
-      private void step() {
+      private static void step() {
     	  boolean[][] newBoard = new boolean[n][n]; // create a new board to record the changes in the Game of Life after 1 time step.
     	  for (int i = 0; i < n; i++) {
     		  for (int j = 0; j < n; j++) { // iterate through each cell in the 2D grid
