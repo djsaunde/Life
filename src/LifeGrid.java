@@ -35,6 +35,11 @@ public class LifeGrid implements ActionListener {
 		});
 	}
 	
+	/**
+	 *   helper method to create buttons for user interface
+	 *   @param caption - caption of the button to be created
+	 *   @return Button b
+	 */
 	private JButton makeButton(String caption) {
 	    JButton b = new JButton(caption);
 	    b.setActionCommand(caption);
@@ -47,20 +52,20 @@ public class LifeGrid implements ActionListener {
 	 */
 	private void createAndShowGUI() {
 		grid = new GridPanel(Life.getDimension());
-		ui = new JPanel();
+		/*ui = new JPanel();
 		
 		start = makeButton("Start");
 		stop = makeButton("Stop");
 		stop.setEnabled(false);
 		
 		ui.add(start); 
-		ui.add(stop);
+		ui.add(stop);*/
 		
 		f = new JFrame("Conway's Game of Life");
 		f.setLayout(new FlowLayout());
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.add(grid);
-		f.add(ui);
+		//f.add(ui);
 		f.setResizable(false);
 		f.pack();
 		f.setLocationRelativeTo(null);
@@ -71,7 +76,7 @@ public class LifeGrid implements ActionListener {
 	 *   calls the repaint() function on the panel which holds the game's grid components
 	 */
 	public void draw(int iteration) {
-		f.setTitle("Conway's Game of Life: Generation " + (iteration+1));
+		f.setTitle("Conway's Game of Life: Generation " + (++iteration));
 		grid.repaint();
 	}
 

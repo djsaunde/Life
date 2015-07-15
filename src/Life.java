@@ -13,6 +13,7 @@ public class Life {
 	 private static boolean[][] lifeBoard;
 	 private static int n;
 	 private static int s;
+	 private static double d;
 	 private static LifeGrid gui;
 	 private static Map<Integer, Integer> ages;
 
@@ -27,12 +28,14 @@ public class Life {
 	  *   @throws InvocationTargetException 
 	  *   @throws FileNotFoundException 
 	  **/
-	 public Life(int n, int s, File f, LifeGrid gui) throws InterruptedException, InvocationTargetException, FileNotFoundException {
+	 public Life(int n, int s, File f, LifeGrid gui, double d) throws InterruptedException, InvocationTargetException, FileNotFoundException {
 		 Life.n = n;
 		 Life.s = s;
+		 Life.d = d;
 		 ages = new HashMap<Integer, Integer>();
 		 parseBoard(f);
 		 Life.gui = gui;
+		 Thread.sleep(100);
 	 }
 	 
 	 /**
@@ -121,7 +124,7 @@ public class Life {
 		 Random rand = new Random();
 	   	 	for (int i = 0; i < n; i++) {
 	   	 		for (int j = 0; j < n; j++) {
-	   				if (rand.nextDouble() < .12) {
+	   				if (rand.nextDouble() < d) {
 	   					ages.put(i*n+j, 1); // init ages at this i, j to be one generation old
 	   					lifeBoard[i][j] = true; // init cell alive at this i, j
 	   				}
