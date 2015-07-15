@@ -70,7 +70,7 @@ public class Life {
 	  *   @throws InterruptedException 
 	  **/
 	 public static void run() throws InterruptedException {
-		 for (int i = 0; i < s; i++) {
+		 for (int i = 0; i != s; i++) {
 			 step();
 			 gui.draw(i);
 			 Thread.sleep(75);
